@@ -31,6 +31,7 @@ public class ValidateMain {
 		for(int i = 1 ; i < TextUtil.maxDistance + 1; i = i + ((Double)(TextUtil.maxDistance / points.size())).intValue())
 			for(int j = 1 ; j < points.size();){
 				
+				initPoint(pointsArray);
 				//DBSCAN算法
 				List<List<Integer>> Cs = DBSCAN.algorithm(pointsArray, i, j,50);
 				
@@ -70,6 +71,14 @@ public class ValidateMain {
 			EXCELUtil.saveAsEXCEL(purityResults, 0, "purityResult", 0);
 			EXCELUtil.saveAsEXCEL(FScoreResults, 0, "FScoreResult", 0);
 		
+	}
+	
+	public static void initPoint(Point[] points){
+		
+		for(Point point : points){
+			point.setStatus("unvisited");
+            point.setLabel("unknown");
+		}
 	}
 	
 	/**

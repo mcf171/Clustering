@@ -21,7 +21,7 @@ public class TextUtil {
 			BufferedReader br=new BufferedReader(fr);
 	        String line="";
 	        String[] arrs=null;
-	        line = br.readLine();
+	        
 	        while ((line=br.readLine())!=null) {
 	        	line = line.trim();
 	            arrs=line.split("\\s+");
@@ -75,7 +75,7 @@ public class TextUtil {
 			BufferedReader br=new BufferedReader(fr);
 	        String line="";
 	        int index = 0;
-	        line = br.readLine();
+	        
 	        while ((line=br.readLine())!=null) {
 	        	line = line.trim();
 	        	sourceList.get(index).setTrueLabel(line);

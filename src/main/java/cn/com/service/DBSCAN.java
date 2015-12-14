@@ -20,6 +20,11 @@ public class DBSCAN {
 		
 		List<List<Integer>> Cs = new ArrayList<List<Integer>>();
 	
+		List<Integer> unvisitedList = new ArrayList<Integer>();
+		
+		for(int i = 0 ; i < points.length; i ++){
+			unvisitedList.add(i);
+		}
 		
 		int labelNumber = 0;
 		int markCount = 0;
@@ -27,44 +32,50 @@ public class DBSCAN {
         while(true){
         	
         	Random random = new Random();
-            int s = random.nextInt(points.length)%(points.length-0+1) + 0;
-            
-		    Point p = points[s];
-		    p.setStatus("visited");
-		    
-		    markCount ++;
-		    List<Integer> N = getN(points, p, e, MinPts, s);
-		    if(N.size() >= MinPts){
-		    	List<Integer> C = new ArrayList<Integer>();
-		    	C.add(s);
-		    	for(int i = 0 ; i < N.size() ; i ++){
-		    		int indexP = N.get(i);
-		    		if(points[indexP].getStatus().equals("unvisited")){
-		    			markCount++;
-		    			points[indexP].setStatus("visited");
-		    			List<Integer> eNumber = getN(points, points[indexP], e, MinPts, indexP);
-		    			if(eNumber.size() >= MinPts)
-		    				N.addAll(eNumber);
-		    			
-		    		}
-		    		if(points[indexP].getLabel().equals("unknown")){
-		    			C.add(indexP);
-		    			points[indexP].setLabel("" + labelNumber);
-		    		}
-		    	}
-		    	Cs.add(C);
-		    	labelNumber++;
-		    }else{
-		    	p.setLabel("noise");
-		    }
-		    if(markCount >= points.length)
-		    	break;
-		    
-		    if(Cs.size() >= maxClusterNumber){
-		    	Cs = null;
-		    	break;
-		    	
-		    }
+        	
+            int index = random.nextInt(unvisitedList.size())%(unvisitedList.size()-0+1) + 0;
+            int s = unvisitedList.get(index);
+
+            if(points[s].getStatus().equals("unvisited")){
+			    points[s].setStatus("visited");
+			    unvisitedList.remove(index);
+			    markCount ++;
+			    List<Integer> N = getN(points, points[s], e, MinPts, s);
+			    if(N.size() >= MinPts){
+			    	List<Integer> C = new ArrayList<Integer>();
+			    	C.add(s);
+			    	points[s].setLabel("" + labelNumber);
+			    	for(int i = 0 ; i < N.size() ; i ++){
+			    		int indexP = N.get(i);
+			    		if(points[indexP].getStatus().equals("unvisited")){
+			    			unvisitedList.remove(unvisitedList.indexOf(indexP));
+			    			markCount++;
+			    			points[indexP].setStatus("visited");
+			    			List<Integer> eNumber = getN(points, points[indexP], e, MinPts, indexP);
+			    			if(eNumber.size() >= MinPts)
+			    				N.addAll(eNumber);
+			    			
+			    		}
+			    		if(points[indexP].getLabel().equals("unknown")){
+			    			C.add(indexP);
+			    			points[indexP].setLabel("" + labelNumber);
+			    		}
+			    	}
+			    	Cs.add(C);
+			    	labelNumber++;
+			    }else{
+			    	points[s].setLabel("noise");
+			    }
+			    if(markCount >= points.length)
+			    	break;
+			    /*
+			    if(Cs.size() >= maxClusterNumber){
+			    	Cs = null;
+			    	break;
+			    	
+			    }
+			    */
+            }
 		}
 		return Cs;
 	}
