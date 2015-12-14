@@ -13,12 +13,16 @@ public class DBSCANTest extends TestCase {
 		
 		
 		List<Point> points = TextUtil.getAllInformation("data/dataset1.dat");
+		points = TextUtil.markTheList("data/dataset1-label.dat", points);
+		List<List<Integer>> Cs = DBSCAN.algorithm(points.toArray(new Point[points.size()]), 1263761, 2000,50);
 		
-		List<List<Integer>> Cs = DBSCAN.algorithm(points.toArray(new Point[points.size()]), 1263761, 2000);
-		
+		System.out.println("when the e is 1263761 and the MinPts is 2000 the number of C is : " + Cs.size());
 		this.assertEquals(Cs.size(), 1);
+		
+		Cs = DBSCAN.algorithm(points.toArray(new Point[points.size()]), 10000, 4,50);
+		System.out.println("when the e is 10000 and the MinPts is 4 the number of C is : " + Cs.size());
 	}
-
+/*
 	public void testCalculateDist(){
 		
 		Point target = new Point();
@@ -32,4 +36,5 @@ public class DBSCANTest extends TestCase {
 		double distance = DBSCAN.calculateDist(target, source);
 		System.out.println(distance);
 	}
+	*/
 }

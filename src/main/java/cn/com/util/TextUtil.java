@@ -9,11 +9,13 @@ import cn.com.model.Point;
 
 public class TextUtil {
 
-public static List<Point> getAllInformation(String fileName){
+	public static double minX = Double.MAX_VALUE, maxX = 0, avgX = 0, minY = Double.MAX_VALUE, maxY = 0,avgY = 0;
+	public static double maxDistance = 0;
+	public static List<Point> getAllInformation(String fileName){
 		
 		List<Point> lists = new ArrayList<Point>();
 		FileReader fr;
-		double minX = Double.MAX_VALUE, maxX = 0, avgX = 0, minY = Double.MAX_VALUE, maxY = 0,avgY = 0;
+		
 		try {
 			fr = new FileReader(fileName);
 			BufferedReader br=new BufferedReader(fr);
@@ -47,7 +49,7 @@ public static List<Point> getAllInformation(String fileName){
 	        }
 	        avgX /= lists.size();
 	        avgY /= lists.size();
-	        
+	        maxDistance = Math.sqrt(Math.pow(maxX-minX, 2) + Math.pow(maxY - minY, 2));
 	        System.out.println(" point x min value is :" + minX + ", max value is :" + maxX + ", avg value is :" + avgX);
 	        System.out.println(" point y min value is :" + minY + ", max value is :" + maxY + ", avg value is :" + avgY);
 	        
@@ -62,5 +64,34 @@ public static List<Point> getAllInformation(String fileName){
         
 		
 		return lists;
+	}
+	
+	public static List<Point> markTheList(String fileName,List<Point> sourceList){
+		
+		FileReader fr;
+		
+		try {
+			fr = new FileReader(fileName);
+			BufferedReader br=new BufferedReader(fr);
+	        String line="";
+	        int index = 0;
+	        line = br.readLine();
+	        while ((line=br.readLine())!=null) {
+	        	line = line.trim();
+	        	sourceList.get(index).setTrueLabel(line);
+	        	index++;
+	        }
+	        
+	        br.close();
+	        fr.close();
+	        
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+        
+		
+		return sourceList;
 	}
 }
