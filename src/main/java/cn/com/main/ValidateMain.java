@@ -27,7 +27,7 @@ public class ValidateMain {
 		List<Object[]> purityResults = new ArrayList<Object[]>();
 		List<Object[]> FScoreResults = new ArrayList<Object[]>();
 		
-		//将List<Poit> 转换为数组
+		//将List<Point> 转换为数组
 		Point[] pointsArray = points.toArray(new Point[points.size()]);
 
 		//每次单独调整最小距离和最小包含个数也就是DBSCAN的两个变量
