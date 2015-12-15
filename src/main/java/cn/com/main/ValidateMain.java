@@ -22,7 +22,8 @@ public class ValidateMain {
 		//文类标文件中给所有的点打上正确的类标
 		points = TextUtil.markTheList("data/dataset2-label.dat", points);
 		
-		validateByKM(points);
+//		validateByKM(points);
+		validateByDB(points);
 		
 	}
 	
