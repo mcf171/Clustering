@@ -20,7 +20,7 @@ public class ValidateMain {
 		points = TextUtil.markTheList("data/dataset1-label.dat", points);
 		
 		//进行归一化，kmeans可以不用
-		points = DataUtil.normalization(points);
+		//points = DataUtil.normalization(points);
 		//List<List<Integer>> Cs = DBSCAN.algorithm(points.toArray(new Point[points.size()]), 1263761, 2000);
 		
 		//保存两种度量方式的结果
@@ -31,15 +31,15 @@ public class ValidateMain {
 		Point[] pointsArray = points.toArray(new Point[points.size()]);
 
 		//每次单独调整最小距离和最小包含个数也就是DBSCAN的两个变量
-		for(double i = TextUtil.minDistance ; i < TextUtil.maxDistance + 1; i = i + (TextUtil.maxDistance-TextUtil.minDistance) / points.size())
-			for(int j = 1 ; j < points.size();){
+		for(double i = TextUtil.minDistance ; i < 2000; i = i + (TextUtil.maxDistance-TextUtil.minDistance) / points.size())
+			for(int j = 1 ; j < 300; j = j +10){
 				
 				initPoint(pointsArray);
 				//DBSCAN算法
 				List<List<Integer>> Cs = DBSCAN.algorithm(pointsArray, i, j,50);
 				
 				//当DBSCAN返回有效的聚类并且聚类的个数至少为一个时进行据算purity和F-score
-				if(Cs != null && Cs.size() >= 1){
+				if(Cs != null && Cs.size() >= 3){
 					
 					//计算purity
 					double purity = purityValidate(pointsArray,Cs);
@@ -64,10 +64,7 @@ public class ValidateMain {
 				}
 				
 				//考虑当MinPts在1-10变化时对于purity和F-score计算很敏感，所以在1-10时每次增加1，大于10时，每次增加20
-				if(j<10)
-					j = j+1;
-				else
-					j = j +20;
+				
 			}
 		
 			//将所有的结果保存为excel文件

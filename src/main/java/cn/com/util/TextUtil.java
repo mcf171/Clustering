@@ -11,9 +11,11 @@ import cn.com.service.DBSCAN;
 public class TextUtil {
 
 	public static double minX = Double.MAX_VALUE, maxX = 0, avgX = 0, minY = Double.MAX_VALUE, maxY = 0,avgY = 0;
-	public static double maxDistance = 0, minDistance = Double.MAX_VALUE;
+	public static double maxDistance = 0, minDistance = Double.MAX_VALUE,avgDistance = 0;
 	public static List<Point> getAllInformation(String fileName){
-		
+		minX = Double.MAX_VALUE;
+		maxX = 0; avgX = 0; minY = Double.MAX_VALUE; maxY = 0;avgY = 0;
+		maxDistance = 0; minDistance = Double.MAX_VALUE;avgDistance = 0;
 		List<Point> lists = new ArrayList<Point>();
 		FileReader fr;
 		
@@ -68,13 +70,14 @@ public class TextUtil {
 				Point targetPoint = lists.get(i);
 				Point sourcePoint = lists.get(j);
 				double distance = DBSCAN.calculateDist(targetPoint, sourcePoint);
+				avgDistance += distance;
 				if(distance > maxDistance)
 					maxDistance = distance;
 				if(distance < minDistance)
 					minDistance = distance;
 			}
-        
-		
+		double temp = maxDistance * lists.size(); 
+		avgDistance /= (lists.size()*(lists.size()-1))*2;
 		return lists;
 	}
 	
