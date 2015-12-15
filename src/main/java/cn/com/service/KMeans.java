@@ -180,9 +180,6 @@ public class KMeans {
      */  
     private void kmeans() {  
         init();  
-        // printDataArray(dataSet,"initDataSet");  
-        // printDataArray(center,"initCenter");  
-  
         // 循环分组，直到误差不变为止  
         while (true) {  
             clusterSet();  
