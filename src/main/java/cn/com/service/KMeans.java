@@ -14,7 +14,7 @@ public class KMeans {
 	private List<Point> dataSet; //数据集
 	private List<Point> center; //簇中心集合
 	private List<List<Point>> cluster; //簇
-	private List jc; //每个簇的簇内误差平方和
+	private List<Double> jc; //每个簇的簇内误差平方和
 	private Random random;
 	
 	public KMeans(int k, List<Point> dataSet) {
@@ -35,7 +35,7 @@ public class KMeans {
 		}
 		center = initCenter();
 		cluster = initCluster();
-		jc = new ArrayList();
+		jc = new ArrayList<Double>();
 	}
 	
 	/*
@@ -72,6 +72,132 @@ public class KMeans {
 	
 	public List<List<Point>> initCluster() {
 		List<List<Point>> cluster = new ArrayList<List<Point>>();
+		for (int i = 0; i < k; i++) {  
+            cluster.add(new ArrayList<Point>());  
+        } 
 		return cluster;
 	}
+	
+	/** 
+     * 计算两个点之间的距离 
+     * @return 距离 
+     */  
+    public double distance(Point p1, Point p2) {  
+        double distance = 0.0;  
+        double x = p1.getX() - p2.getX();
+        double y = p1.getY() - p2.getY();
+        double z = x * x + y * y;  
+        distance = Math.sqrt(z);   
+        return distance;  
+    }  
+    
+    /** 
+     * 获取距离集合中最小距离的位置 
+     * @return 最小距离在距离数组中的位置 
+     */  
+    public int minDistance(double[] distances) {  
+        double minDistance = distances[0];  
+        int minLocation = 0;  
+        for (int i = 1; i < distances.length; i++) {  
+            if (distances[i] < minDistance) {  
+                minDistance = distances[i];  
+                minLocation = i;  
+            } else if (distances[i] == minDistance) // 如果相等，随机返回一个位置  
+            {  
+                if (random.nextInt(10) < 5) {  
+                    minLocation = i;  
+                }  
+            }  
+        }  
+        return minLocation;  
+    }  
+   
+    /** 
+     * 核心，将当前元素放到最小距离中心相关的簇中 
+     */  
+    public void clusterSet() {  
+        double[] distances = new double[k];  
+        for (int i = 0; i < dataSetLength; i++) {  
+            for (int j = 0; j < k; j++) {  
+                distances[j] = distance(dataSet.get(i), center.get(j));  
+            }  
+            int minLocation = minDistance(distances);  
+            cluster.get(minLocation).add(dataSet.get(i));// 核心，将当前元素放到最小距离中心相关的簇中  
+        }  
+    }  
+    
+    /** 
+     * 求两点误差平方的方法 
+     * @return 误差平方 
+     */  
+    public double errorSquare(Point p1, Point p2) {  
+        double x = p1.getX() - p2.getX(); 
+        double y = p1.getY() - p2.getY(); 
+  
+        double errSquare = x * x + y * y;  
+  
+        return errSquare;  
+    }  
+    
+    /** 
+     * 计算误差平方和
+     */  
+    public void countRule() {  
+        double jcF = 0;  
+        for (int i = 0; i < cluster.size(); i++) {  
+            for (int j = 0; j < cluster.get(i).size(); j++) {  
+                jcF += errorSquare(cluster.get(i).get(j), center.get(i));  
+  
+            }  
+        }  
+        jc.add(jcF);  
+    }  
+  
+    /** 
+     * 设置新的簇中心方法 
+     */  
+    public void setNewCenter() {  
+        for (int i = 0; i < k; i++) {  
+            int n = cluster.get(i).size();  
+            if (n != 0) {  
+                Point newCenter = new Point();  
+                double x=0.0;
+                double y=0.0;
+                for (int j = 0; j < n; j++) {  
+                    x += cluster.get(i).get(j).getX();  
+                    y += cluster.get(i).get(j).getY();
+                }  
+                // 设置一个平均值  
+                newCenter.setX(x/n);  
+                newCenter.setY(y/n);
+                center.set(i, newCenter);  
+            }  
+        }  
+    } 
+    
+    /** 
+     * Kmeans算法核心过程方法 
+     */  
+    private void kmeans() {  
+        init();  
+        // printDataArray(dataSet,"initDataSet");  
+        // printDataArray(center,"initCenter");  
+  
+        // 循环分组，直到误差不变为止  
+        while (true) {  
+            clusterSet();  
+            countRule();  
+            if (m != 0) {  
+                if (jc.get(m) - jc.get(m - 1) == 0) {  
+                    break;  
+                }  
+            }  
+  
+            setNewCenter();  
+            m++;  
+            cluster.clear();  
+            cluster = initCluster();  
+        }  
+    } 
+    
 }
