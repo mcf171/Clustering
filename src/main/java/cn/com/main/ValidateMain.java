@@ -15,12 +15,13 @@ public class ValidateMain {
 	public static void main(String[] args) {
 
 		// 从文件中读取所有的点
-		List<Point> points = TextUtil.getAllInformation("data/dataset2.dat");
+		List<Point> points = TextUtil.getAllInformation("data/dataset1.dat");
 
 		// 文类标文件中给所有的点打上正确的类标
-		points = TextUtil.markTheList("data/dataset2-label.dat", points);
+		points = TextUtil.markTheList("data/dataset1-label.dat", points);
 
 		validateByKM(points);
+		validateByDB(points);
 
 	}
 
@@ -71,8 +72,7 @@ public class ValidateMain {
 	}
 
 	public static void validateByDB(List<Point> points) {
-		// 进行归一化，kmeans可以不用
-		points = DataUtil.normalization(points);
+
 		// List<List<Integer>> Cs = DBSCAN.algorithm(points.toArray(new
 		// Point[points.size()]), 1263761, 2000);
 
@@ -84,7 +84,7 @@ public class ValidateMain {
 		Point[] pointsArray = points.toArray(new Point[points.size()]);
 
 		// 每次单独调整最小距离和最小包含个数也就是DBSCAN的两个变量
-		for (double i = TextUtil.minDistance; i < 2000; i = i
+		for (double i = TextUtil.minDistance; i < TextUtil.avgDistance; i = i
 				+ (TextUtil.maxDistance - TextUtil.minDistance) / points.size())
 			for (int j = 1; j < 300; j = j + 10) {
 

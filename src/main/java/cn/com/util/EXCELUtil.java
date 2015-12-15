@@ -32,7 +32,7 @@ public class EXCELUtil
 					sheet.addCell(label2);
 					sheet.addCell(label1);
 				}else{
-					Label label1 = new Label(1, rowNumber, "" + (int) result[0]);
+					Label label1 = new Label(1, rowNumber, "" + (double) result[0]);
 					Label label2 = new Label(2, rowNumber, "" + (int) result[1]);
 					Label label3 = new Label(3, rowNumber, "" + (double) result[2]);
 					sheet.addCell(label2);
