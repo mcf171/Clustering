@@ -6,6 +6,7 @@ import java.util.List;
 import cn.com.model.Point;
 import cn.com.service.DBSCAN;
 import cn.com.service.KMeans;
+import cn.com.service.KMeans2;
 import cn.com.util.DataUtil;
 import cn.com.util.EXCELUtil;
 import cn.com.util.TextUtil;
@@ -15,10 +16,10 @@ public class ValidateMain {
 	public static void main(String[] args) {
 		
 		//从文件中读取所有的点
-		List<Point> points = TextUtil.getAllInformation("data/dataset2.dat");
+		List<Point> points = TextUtil.getAllInformation("data/testdata1.txt");
 		
 		//文类标文件中给所有的点打上正确的类标
-		points = TextUtil.markTheList("data/dataset2-label.dat", points);
+		points = TextUtil.markTheList("data/testdata1-label.txt", points);
 		
 		validateByKM(points);
 		
@@ -32,7 +33,7 @@ public class ValidateMain {
 		//将List<Point> 转换为数组
 		Point[] pointsArray = points.toArray(new Point[points.size()]);
 		
-		for(int i=1; i<=20; i++) {			
+		for(int i=1; i<=4; i++) {			
 			KMeans km = new KMeans(i,points);
 			List<List<Integer>> cluster = km.kmeans();
 			

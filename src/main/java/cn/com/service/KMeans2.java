@@ -6,18 +6,21 @@ import java.util.Random;
 
 import cn.com.model.Point;
 
-public class KMeans {
+public class KMeans2 {
 	
 	private int k; //簇的数量
 	private int m; //迭代次数
 	private int dataSetLength; //数据元素个数，即数据集的长度
 	private List<Point> dataSet; //数据集
 	private List<Point> center; //簇中心集合
+	private List<Point> oldCenter; //簇中心集合
 	private List<List<Integer>> cluster; //簇
 	private List<Double> jc; //每个簇的簇内误差平方和
 	private Random random;
+	private boolean endFlag;
+	private double mu;
 	
-	public KMeans(int k, List<Point> dataSet) {
+	public KMeans2(int k, List<Point> dataSet) {
 		if(k<=0) {
 			k=1;
 		}
@@ -27,15 +30,18 @@ public class KMeans {
 	
 	
 	public void init() {
-		m = 0;
+		mu = 1E-10;
+		m = 7;
 		random = new Random();
 		dataSetLength = dataSet.size();
 		if(k>dataSetLength) {
 			k = dataSetLength;
 		}
 		center = initCenter();
+		oldCenter = new ArrayList<Point>();
 		cluster = initCluster();
 		jc = new ArrayList<Double>();
+		endFlag = false;
 	}
 	
 	/*
@@ -156,7 +162,8 @@ public class KMeans {
     /** 
      * 设置新的簇中心
      */  
-    public void setNewCenter() {  
+    public void setNewCenter() { 
+    	oldCenter.addAll(center);
         for (int i = 0; i < k; i++) {  
             int n = cluster.get(i).size();  
             if (n != 0) {  
@@ -172,7 +179,13 @@ public class KMeans {
                 newCenter.setY(y/n);
                 center.set(i, newCenter);  
             }  
-        }  
+        }
+        for(int i=0; i<center.size(); i++) {
+        	double dis = distance(oldCenter.get(i),center.get(i));
+        	if(dis <= mu) {
+        		endFlag = true;
+        	}
+        }
     } 
     
     /** 
@@ -180,22 +193,17 @@ public class KMeans {
      */  
     public List<List<Integer>> kmeans() {  
         init();  
-        // 循环分组，直到误差不变为止  
-        while (true) {  
+        // 循环分组，直到质点不变为止  
+        for(int i=0 ; i<= m; i++) {
+        	cluster.clear();  
+            cluster = initCluster();
             clusterSet();  
-            countRule();  
-            if (m != 0) {  
-                if (jc.get(m) - jc.get(m - 1) == 0) {  
-                    break;  
-                }  
-            }  
-  
-            setNewCenter();  
-            m++;  
-            cluster.clear();  
-            cluster = initCluster();  
-        }  
+            countRule();            
+            setNewCenter();   
+            if(endFlag) {
+            	break;
+            }
+        }
         return cluster;
     } 
-    
 }
