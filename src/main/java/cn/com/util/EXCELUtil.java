@@ -27,14 +27,14 @@ public class EXCELUtil
 				Object[] result = results.get(i);
 
 				if(result.length == 2) {
-					Label label1 = new Label(1, rowNumber, "" + (int) result[0]);
-					Label label2 = new Label(2, rowNumber, "" + (double) result[1]);
+					Label label1 = new Label(1, rowNumber, "" + (Integer) result[0]);
+					Label label2 = new Label(2, rowNumber, "" + (Double) result[1]);
 					sheet.addCell(label2);
 					sheet.addCell(label1);
 				}else{
-					Label label1 = new Label(1, rowNumber, "" + (double) result[0]);
-					Label label2 = new Label(2, rowNumber, "" + (int) result[1]);
-					Label label3 = new Label(3, rowNumber, "" + (double) result[2]);
+					Label label1 = new Label(1, rowNumber, "" + (Double) result[0]);
+					Label label2 = new Label(2, rowNumber, "" + (Integer) result[1]);
+					Label label3 = new Label(3, rowNumber, "" + (Double) result[2]);
 					sheet.addCell(label2);
 					sheet.addCell(label3);
 					sheet.addCell(label1);

@@ -24,7 +24,7 @@ public class ValidateMain {
 
 //		validateByKM(points);
 		validateByDB(points);
-		validateByDB(points);
+		
 
 	}
 
