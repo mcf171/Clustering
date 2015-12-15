@@ -25,13 +25,14 @@ public class EXCELUtil
 			int i = start;
 			for (; i < results.size(); i++) {
 				Object[] result = results.get(i);
+
 				if(result.length == 2) {
 					Label label1 = new Label(1, rowNumber, "" + (int) result[0]);
 					Label label2 = new Label(2, rowNumber, "" + (double) result[1]);
 					sheet.addCell(label2);
 					sheet.addCell(label1);
 				}else{
-					Label label1 = new Label(1, rowNumber, "" + (int) result[0]);
+					Label label1 = new Label(1, rowNumber, "" + (double) result[0]);
 					Label label2 = new Label(2, rowNumber, "" + (int) result[1]);
 					Label label3 = new Label(3, rowNumber, "" + (double) result[2]);
 					sheet.addCell(label2);
@@ -39,14 +40,14 @@ public class EXCELUtil
 					sheet.addCell(label1);
 				}
 				
+
 				// 将定义好的单元格添加到工作表中
 
 				/**/ /*
 						 * 生成一个保存数字的单元格 必须使用Number的完整包路径，否则有语法歧义
 						 * 单元格位置是第二列，第一行，值为789.123
 						 */
-				jxl.write.Number number = new jxl.write.Number(0, rowNumber, rowNumber);
-				sheet.addCell(number);
+				
 				rowNumber++;
 
 				if (rowNumber >= 60000)

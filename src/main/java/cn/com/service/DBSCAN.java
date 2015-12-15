@@ -68,13 +68,13 @@ public class DBSCAN {
 			    }
 			    if(markCount >= points.length)
 			    	break;
-			    /*
+			    
 			    if(Cs.size() >= maxClusterNumber){
 			    	Cs = null;
 			    	break;
 			    	
 			    }
-			    */
+			    
             }
 		}
 		return Cs;
