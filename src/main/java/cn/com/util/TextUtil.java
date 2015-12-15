@@ -6,11 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.com.model.Point;
+import cn.com.service.DBSCAN;
 
 public class TextUtil {
 
 	public static double minX = Double.MAX_VALUE, maxX = 0, avgX = 0, minY = Double.MAX_VALUE, maxY = 0,avgY = 0;
-	public static double maxDistance = 0;
+	public static double maxDistance = 0, minDistance = Double.MAX_VALUE;
 	public static List<Point> getAllInformation(String fileName){
 		
 		List<Point> lists = new ArrayList<Point>();
@@ -49,7 +50,7 @@ public class TextUtil {
 	        }
 	        avgX /= lists.size();
 	        avgY /= lists.size();
-	        maxDistance = Math.sqrt(Math.pow(maxX-minX, 2) + Math.pow(maxY - minY, 2));
+	        
 	        System.out.println(" point x min value is :" + minX + ", max value is :" + maxX + ", avg value is :" + avgX);
 	        System.out.println(" point y min value is :" + minY + ", max value is :" + maxY + ", avg value is :" + avgY);
 	        
@@ -61,6 +62,17 @@ public class TextUtil {
 			e.printStackTrace();
 		}
 		
+		
+		for(int i = 0 ; i < lists.size() - 1; i ++)
+			for(int j = i + 1 ; j < lists.size(); j ++){
+				Point targetPoint = lists.get(i);
+				Point sourcePoint = lists.get(j);
+				double distance = DBSCAN.calculateDist(targetPoint, sourcePoint);
+				if(distance > maxDistance)
+					maxDistance = distance;
+				if(distance < minDistance)
+					minDistance = distance;
+			}
         
 		
 		return lists;

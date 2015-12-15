@@ -5,6 +5,7 @@ import java.util.List;
 
 import cn.com.model.Point;
 import cn.com.service.DBSCAN;
+import cn.com.util.DataUtil;
 import cn.com.util.EXCELUtil;
 import cn.com.util.TextUtil;
 
@@ -18,6 +19,8 @@ public class ValidateMain {
 		//文类标文件中给所有的点打上正确的类标
 		points = TextUtil.markTheList("data/dataset1-label.dat", points);
 		
+		//进行归一化，kmeans可以不用
+		points = DataUtil.normalization(points);
 		//List<List<Integer>> Cs = DBSCAN.algorithm(points.toArray(new Point[points.size()]), 1263761, 2000);
 		
 		//保存两种度量方式的结果
@@ -28,7 +31,7 @@ public class ValidateMain {
 		Point[] pointsArray = points.toArray(new Point[points.size()]);
 
 		//每次单独调整最小距离和最小包含个数也就是DBSCAN的两个变量
-		for(int i = 1 ; i < TextUtil.maxDistance + 1; i = i + ((Double)(TextUtil.maxDistance / points.size())).intValue())
+		for(double i = TextUtil.minDistance ; i < TextUtil.maxDistance + 1; i = i + (TextUtil.maxDistance-TextUtil.minDistance) / points.size())
 			for(int j = 1 ; j < points.size();){
 				
 				initPoint(pointsArray);
