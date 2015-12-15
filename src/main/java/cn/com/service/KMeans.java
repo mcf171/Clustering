@@ -13,7 +13,7 @@ public class KMeans {
 	private int dataSetLength; //数据元素个数，即数据集的长度
 	private List<Point> dataSet; //数据集
 	private List<Point> center; //簇中心集合
-	private List<List<Point>> cluster; //簇
+	private List<List<Integer>> cluster; //簇
 	private List<Double> jc; //每个簇的簇内误差平方和
 	private Random random;
 	
@@ -39,7 +39,7 @@ public class KMeans {
 	}
 	
 	/*
-	 * 
+	 * 初始化k个空簇
 	 */
 	public List<Point> initCenter() {
 		List<Point> center = new ArrayList<Point>();
@@ -70,17 +70,19 @@ public class KMeans {
 		return center;
 	}
 	
-	public List<List<Point>> initCluster() {
-		List<List<Point>> cluster = new ArrayList<List<Point>>();
+	/**
+	 * 初始化k个空簇
+	 */
+	public List<List<Integer>> initCluster() {
+		List<List<Integer>> cluster = new ArrayList<List<Integer>>();
 		for (int i = 0; i < k; i++) {  
-            cluster.add(new ArrayList<Point>());  
+            cluster.add(new ArrayList<Integer>());  
         } 
 		return cluster;
 	}
 	
 	/** 
      * 计算两个点之间的距离 
-     * @return 距离 
      */  
     public double distance(Point p1, Point p2) {  
         double distance = 0.0;  
@@ -93,7 +95,6 @@ public class KMeans {
     
     /** 
      * 获取距离集合中最小距离的位置 
-     * @return 最小距离在距离数组中的位置 
      */  
     public int minDistance(double[] distances) {  
         double minDistance = distances[0];  
@@ -122,7 +123,7 @@ public class KMeans {
                 distances[j] = distance(dataSet.get(i), center.get(j));  
             }  
             int minLocation = minDistance(distances);  
-            cluster.get(minLocation).add(dataSet.get(i));// 核心，将当前元素放到最小距离中心相关的簇中  
+            cluster.get(minLocation).add(i);// 核心，将当前元素放到最小距离中心相关的簇中  
         }  
     }  
     
@@ -146,7 +147,7 @@ public class KMeans {
         double jcF = 0;  
         for (int i = 0; i < cluster.size(); i++) {  
             for (int j = 0; j < cluster.get(i).size(); j++) {  
-                jcF += errorSquare(cluster.get(i).get(j), center.get(i));  
+                jcF += errorSquare(dataSet.get(cluster.get(i).get(j)), center.get(i));  
   
             }  
         }  
@@ -164,8 +165,8 @@ public class KMeans {
                 double x=0.0;
                 double y=0.0;
                 for (int j = 0; j < n; j++) {  
-                    x += cluster.get(i).get(j).getX();  
-                    y += cluster.get(i).get(j).getY();
+                    x += dataSet.get(cluster.get(i).get(j)).getX();  
+                    y += dataSet.get(cluster.get(i).get(j)).getY();
                 }  
                 // 设置一个平均值  
                 newCenter.setX(x/n);  
@@ -178,7 +179,7 @@ public class KMeans {
     /** 
      * Kmeans算法核心过程方法 
      */  
-    private void kmeans() {  
+    public List<List<Integer>> kmeans() {  
         init();  
         // 循环分组，直到误差不变为止  
         while (true) {  
@@ -195,6 +196,7 @@ public class KMeans {
             cluster.clear();  
             cluster = initCluster();  
         }  
+        return cluster;
     } 
     
 }
